@@ -27,16 +27,14 @@ export class MessageController {
               },
           data : data
             };
-        
-        await axios.request(config)
-                .then((response:any) => {
-                  console.log(JSON.stringify(response.data));
-                })
-        .catch((error:any) => {
-                  console.log(error);
-        
-                }
-            );
+   await axios.request(config)
+            .then((response:any) => {
+                console.log(JSON.stringify(response.data));
+            })
+            .catch((error:any) => {
+                console.log(error);
+            });
+
     }
 
 }
