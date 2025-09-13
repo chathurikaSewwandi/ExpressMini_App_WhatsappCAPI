@@ -1,3 +1,4 @@
+import { webhookMessageDto } from '../dto/webhookVerification.dto';
 import { WebhookService } from './../service/webhook.service';
 
 import { Request, Response } from "express";
@@ -31,7 +32,13 @@ export class WebhookController {
 }
     webhookMessage = async (req: Request, res: Response) => {
         
-        console.log(JSON.stringify(req.body));
+        //console.log(JSON.stringify(req.body));
+        const data = req.body as webhookMessageDto;
+
+        const message = data.entry[0].changes[0].value.message[0].text.body;
+        const phoneNumber = data.entry[0].changes[0].value.contacts[0].wa_id;
+
+        console.log(phoneNumber + "  :  " +message);
 
     }
 }
