@@ -1,3 +1,4 @@
+
 import axios from "axios";
 import { APP_CONFIG } from "../config/app.config";
 import { Request, Response } from "express";
@@ -27,6 +28,7 @@ export class MessageController {
               },
           data : data
             };
+            
    await axios.request(config)
             .then((response:any) => {
                 console.log(JSON.stringify(response.data));

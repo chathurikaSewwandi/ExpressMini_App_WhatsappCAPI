@@ -9,8 +9,10 @@ const messageController = new MessageController();
 const webhookController = new WebhookController();
 
 app.post("/send-message",messageController.sendMessage);
+
 app.get("/webhook", webhookController.webhook);
 app.post("/webhook", webhookController.webhookMessage);
+
 app.get('/health', (req, res) => {
     res.send('OK');
 });
