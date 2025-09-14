@@ -34,7 +34,7 @@ export interface webhookMessageDto{
                                 wa_id:string;
                             }
                         ],
-                        message:[
+                        messages:[
                             {
                                 from:string;
                                 id:string;

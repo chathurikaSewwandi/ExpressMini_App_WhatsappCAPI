@@ -35,7 +35,7 @@ export class WebhookController {
         //console.log(JSON.stringify(req.body));
         const data = req.body as webhookMessageDto;
 
-        const message = data.entry[0].changes[0].value.message[0].text.body;
+        const message = data.entry[0].changes[0].value.messages[0].text.body;
         const phoneNumber = data.entry[0].changes[0].value.contacts[0].wa_id;
 
         console.log(phoneNumber + "  :  " +message);
