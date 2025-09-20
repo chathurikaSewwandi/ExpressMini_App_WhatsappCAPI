@@ -8,7 +8,7 @@ app.use(express.json());
 const messageController = new MessageController();
 const webhookController = new WebhookController();
 
-app.post("/send-message",messageController.sendMessage);
+//app.post("/send-message",messageController.sendMessage);
 
 app.get("/webhook", webhookController.webhook);
 app.post("/webhook", webhookController.webhookMessage);
