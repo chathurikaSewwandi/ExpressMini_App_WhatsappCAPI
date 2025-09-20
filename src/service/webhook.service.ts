@@ -2,11 +2,13 @@ import { MessageService } from './message.service';
 import { Request, Response } from "express";
 import { webhookMessageDto, webhookVerificationDto, webhookVerificationResponsDto } from "../dto/webhookVerification.dto";
 import { APP_CONFIG } from "../config/app.config";
+import { GeminiService } from './gemini.service';
 
 export class WebhookService{
 
     private static instance: WebhookService;
     private MessageService:MessageService;
+    private geminiService:GeminiService;
 
     public static getInstance(): WebhookService{
         if (!WebhookService.instance) {
@@ -18,6 +20,7 @@ export class WebhookService{
 
     private constructor(){
         this.MessageService = MessageService.getInstance();
+        this.geminiService = GeminiService.getInstance();
 
     }
    
@@ -40,19 +43,34 @@ export class WebhookService{
     public async handleReceiveMessage(data:webhookMessageDto):Promise<boolean>{
          //extracting message from recieved notification via webhook
         //this should be send to the AI model to generate a reply
+        const status = data.entry[0].changes[0].value.statuses;
+        if(status!== undefined && status.length>0 ){
+            console.log('status: ', status[0].status);
+            return true;
+        }
+try{
         const message = data.entry[0].changes[0].value.messages[0].text.body;
-
+         if(message === undefined){
+                console.log('message is undefined');
+                console.log(JSON.stringify(data));
+                return true;
+            }
         //extracting phone number and name from recieved notification via webhook
         const phoneNumber = data.entry[0].changes[0].value.contacts[0].wa_id;
         const name = data.entry[0].changes[0].value.contacts[0].profile.name;
 
-        const replyMessage = `Hello ${name}, Your Message Received thank you !`;
-        
+        //const replyMessage = `Hello ${name}, Your Message Received thank you !`;
+        const replyMessage = await this.geminiService.generateReply(message);
          //const replyMessage = await this.aiService.generateReply(message);
         const isReplied = await this.MessageService.sendMessage(phoneNumber,replyMessage);
             if (isReplied) {
                 return true;
             }
-        return false;
+        }catch(error:any){
+            console.log(error);
+            return true;
         }
+        return false;
+
+    }
 }

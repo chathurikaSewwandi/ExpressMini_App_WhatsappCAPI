@@ -40,6 +40,7 @@ export class MessageService{
            try{
                 const response = await axios.request(config)
                 if(response.status === 200){
+                    console.log('reply send to ',phoneNumber);
                    return true;
                 }
            }catch(error){
