@@ -44,7 +44,9 @@ export interface webhookMessageDto{
                                 }
                                 type:string
                             }
-                        ]
+                        ],
+                        statuses:[],
+                        errors:[],
                     
                    };
                    field:string;
