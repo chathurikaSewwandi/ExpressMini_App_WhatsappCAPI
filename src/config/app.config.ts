@@ -10,5 +10,6 @@ export const APP_CONFIG = {
     PORT:process.env.PORT,
     OPEN_API_KEY:process.env.OPEN_API_KEY,
     GEMINI_API_KEY:process.env.GEMINI_API_KEY,
+    MONGO_URI: process.env.MONGO_URI || ''
     
 }

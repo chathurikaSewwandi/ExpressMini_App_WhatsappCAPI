@@ -1,10 +1,14 @@
+import { MessageDao } from './../dao/message.dao';
 import axios from "axios";
 import { APP_CONFIG } from "../config/app.config";
 import { error } from "console";
+import { IMessage } from "../model/message.model";
+import { IMessageHistory } from '../dto/messageHistory.dto';
 
 export class MessageService{
 
     private static instance: MessageService;
+    private MessageDao:MessageDao;
     public static getInstance(): MessageService {
         if(!MessageService.instance){
             MessageService.instance = new MessageService();
@@ -12,6 +16,7 @@ export class MessageService{
         return MessageService.instance;
     }
     private constructor(){
+        this.MessageDao = MessageDao.getInstance();
 
     }
     public async sendMessage(phoneNumber:string, message:string){
@@ -48,4 +53,31 @@ export class MessageService{
            }
             return false;
         }
+
+    public async getMessagesByUserId(userId: string): Promise<IMessageHistory[]>{
+       try {
+         const messages = await MessageDao.getInstance().getMessagesByUserId(userId);
+         
+         const history: IMessageHistory[] = messages.map((message) => {
+            return {
+                role: message.role,
+                parts:[{ text: message.content}]
+            }
+         });
+
+         return history;
+       } catch (error) {
+        console.log(error);
+        throw error;
+        
+       }
+    }public async bulkCreateMessages(messages: IMessage[]): Promise<IMessage[]> {
+
+        try{
+            return await this.MessageDao.bulkCreateMessages(messages);
+        }catch(error){
+            console.log(error);
+            throw error;
+        }
+    }
 }

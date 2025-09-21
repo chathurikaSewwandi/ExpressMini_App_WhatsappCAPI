@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import { webhookMessageDto, webhookVerificationDto, webhookVerificationResponsDto } from "../dto/webhookVerification.dto";
 import { APP_CONFIG } from "../config/app.config";
 import { GeminiService } from './gemini.service';
+import { IMessage, Role } from '../model/message.model';
 
 export class WebhookService{
 
@@ -50,6 +51,8 @@ export class WebhookService{
         }
 try{
         const message = data.entry[0].changes[0].value.messages[0].text.body;
+        //this should save to db
+        //then need to retriew last five mesge reply
          if(message === undefined){
                 console.log('message is undefined');
                 console.log(JSON.stringify(data));
@@ -59,8 +62,24 @@ try{
         const phoneNumber = data.entry[0].changes[0].value.contacts[0].wa_id;
         const name = data.entry[0].changes[0].value.contacts[0].profile.name;
 
+        const history = await this.MessageService.getMessagesByUserId(phoneNumber);
+
         //const replyMessage = `Hello ${name}, Your Message Received thank you !`;
-        const replyMessage = await this.geminiService.generateReply(message);
+        const replyMessage = await this.geminiService.generateReply(message,history);
+
+        const newMessage:IMessage = {
+            userId: phoneNumber,
+            role: Role.USER,
+            content: message
+        }
+        const newReplyMessage: IMessage ={
+            userId:phoneNumber,
+            role:Role.MODEL,
+            content: replyMessage
+        }
+
+        await this.MessageService.bulkCreateMessages([newMessage,newReplyMessage]);
+
          //const replyMessage = await this.aiService.generateReply(message);
         const isReplied = await this.MessageService.sendMessage(phoneNumber,replyMessage);
             if (isReplied) {
