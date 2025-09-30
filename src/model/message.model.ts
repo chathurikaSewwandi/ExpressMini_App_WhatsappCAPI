@@ -5,6 +5,7 @@ export enum Role {
     MODEL = 'model',
 }
 export interface IMessage{
+    _id?: string;
     userId: string;
     role: Role;
     content: string;
