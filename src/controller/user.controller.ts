@@ -17,4 +17,7 @@ export class UserController{
         const createdUser = await this.UserService.createUser(user);
         res.status(201).json(createdUser);
     }
+    hello = async (req: Request, res: Response) => {
+        res.status(200).json({message: 'Hello'});
+    }
 }
