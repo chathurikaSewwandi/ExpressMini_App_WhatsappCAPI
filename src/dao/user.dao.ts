@@ -22,4 +22,13 @@ export class UserDao {
             throw error;
          }
          }
+    public async getUserByEmail(email:string): Promise<IUser>{
+        try {
+            return await User.findOne({email:email}).lean().exec() as IUser;
+            
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
 }
