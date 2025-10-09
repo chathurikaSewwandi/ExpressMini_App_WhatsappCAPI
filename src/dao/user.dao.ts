@@ -18,7 +18,6 @@ export class UserDao {
                 // createdUser.save();
             return createdUser.toJSON() as IUser;
          }catch(error){
-            console.log(error);
             throw error;
          }
          }

@@ -17,15 +17,27 @@ export class UserController{
             res.status(400).json({message: 'Name and phone number are required'});
             return;
         }
-
-        const createdUser = await this.UserService.createUser(user);
-        res.status(201).json(createdUser);
+        try{
+            const createdUser = await this.UserService.createUser(user);
+            res.status(201).json(createdUser);
+        }
+        catch(error:any){  
+            if(error.message === ERRORS.USER_ALREADY_EXISTS){
+                res.status(400).json({message: 'User already exists'});
+                return;
+            }else{
+            res.status(500).json({message: 'Internal server error'});
+            return;
+        }
+            
+        }
     }
 //login
 login = async(req: Request, res:Response) => {
     const user = req.body as unknown as LoginDto; //{email:string, password: string}
     try {
         const loginUser = await this.UserService.login(user);
+        res.status(200).json(loginUser);
         
     } catch (error:any) {
         if (error.Message === ERRORS.USER_NOT_FOUND) {

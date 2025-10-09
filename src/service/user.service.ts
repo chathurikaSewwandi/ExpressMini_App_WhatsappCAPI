@@ -21,7 +21,12 @@ public async createUser(user:IUser): Promise<IUser>{
     try{
         const createdUser = await this.userDao.createUser(user); 
         return createdUser;
-    }catch(error){
+    }catch(error:any){
+       
+        if(error.code === 11000){
+              console.log(error.errorResponse.errmsg);
+            throw new Error(ERRORS.USER_ALREADY_EXISTS);
+        }
         console.log(error);
         throw error;
     }
@@ -42,8 +47,8 @@ public async login(user:LoginDto):Promise<Partial<IUser>>{
 
         return userWithoutPassword;
         
-    } catch (error) {
-         console.log(error);
+    } catch (error:any) {
+         console.log(error.message);
         throw error;
     }
 }

@@ -1,5 +1,5 @@
+import  mongoose from 'mongoose';
 import express from 'express';
-import mongoose from 'mongoose';
 import { APP_CONFIG } from './config/app.config';
 import { WebhookRouter } from './routes/webhook.router';
 import { MessageRouter } from './routes/message.router';
@@ -23,13 +23,22 @@ app.get('/health', (req, res) => {
     res.send('OK');
 });
 
-mongoose.connect(APP_CONFIG.MONGO_URI).then(() => {
+mongoose.connect(APP_CONFIG.MONGO_URI).then((mongoose) => {
+    const models = mongoose.modelNames();
+    for(const model of models){
+        mongoose.model(model).createIndexes();
+        console.log(`Indexes created for model: ${model}`);
+        mongoose.model(model).ensureIndexes();
+        mongoose.model(model).createCollection();
+    }
+
     console.log('Connected to MongoDB');
     app.listen(5885, () => {
         console.log("Server is running on port 5885");
     });
-    }).catch((error) => {
-        console.log(error);
+
+    }).catch((err) => {
+        console.log(err);
     });
 //app.listen(5885, () => {
    // console.log("Server is running on port 5885");

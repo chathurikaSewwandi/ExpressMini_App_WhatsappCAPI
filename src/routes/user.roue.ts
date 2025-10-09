@@ -26,6 +26,8 @@ export class UserRouter {
         //this.router.get("/", this.userController.getUsers);
         //localhost:{port}/user/hello
         this.router.post("/hello", this.userController.hello);
+
+        this.router.post("/login", this.userController.login);
     }
     public getRouter(): Router {
         return this.router;
