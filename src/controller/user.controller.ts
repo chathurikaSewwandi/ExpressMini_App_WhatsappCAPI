@@ -1,3 +1,4 @@
+import { AuthService } from './../service/auth.service';
 import { Message } from './../model/message.model';
 import { error } from 'console';
 import { LoginDto } from './../dto/login/login.dto';
@@ -6,9 +7,11 @@ import { IUser } from './../model/user.model';
 import { UserService } from './../service/user.service';
 import { ERRORS } from '../constants/errors.constants';
 export class UserController{
-    private UserService:UserService;
+    private userService:UserService;
+    private authService: AuthService;
     constructor(){
-        this.UserService = UserService.getInstance(); 
+        this.userService = UserService.getInstance();
+        this.authService = AuthService.getInstance(); 
     }
 //register
     createUser = async (req:Request, res:Response) =>{
@@ -18,7 +21,7 @@ export class UserController{
             return;
         }
         try{
-            const createdUser = await this.UserService.createUser(user);
+            const createdUser = await this.userService.createUser(user);
             res.status(201).json(createdUser);
         }
         catch(error:any){  
@@ -36,7 +39,7 @@ export class UserController{
 login = async(req: Request, res:Response) => {
     const user = req.body as unknown as LoginDto; //{email:string, password: string}
     try {
-        const loginUser = await this.UserService.login(user);
+        const loginUser = await this.authService.login(user);
         res.status(200).json(loginUser);
         
     } catch (error:any) {

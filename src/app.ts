@@ -4,6 +4,7 @@ import { APP_CONFIG } from './config/app.config';
 import { WebhookRouter } from './routes/webhook.router';
 import { MessageRouter } from './routes/message.router';
 import { UserRouter } from './routes/user.roue';
+import { AuthRouter } from './routes/auth.routes';
 
 const app = express();
 app.use(express.json());
@@ -12,12 +13,14 @@ app.use(express.json());
 const webhookRouter = WebhookRouter.getInstance();
 const messageRouter = MessageRouter.getInstance();
 const userRouter = UserRouter.getInstance();
+const authRouter = AuthRouter.getInstance();
 
 //app.post("/send-message",messageController.sendMessage);
 
 app.use("/webhook", webhookRouter.getRouter());
 app.use("/user", userRouter.getRouter());
 app.use("/message", messageRouter.getRouter());
+app.use("/auth",authRouter.getRouter());
 
 app.get('/health', (req, res) => {
     res.send('OK');

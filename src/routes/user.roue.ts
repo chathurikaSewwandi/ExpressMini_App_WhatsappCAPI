@@ -21,13 +21,13 @@ export class UserRouter {
     }
     public initRoutes() {
         //localhost:{port}/user/ - POST
-        this.router.post("/", this.userController.createUser);
+        //this.router.post("/", this.userController.createUser);
         //localhost:{port}/user/ - GET
         //this.router.get("/", this.userController.getUsers);
         //localhost:{port}/user/hello
         this.router.post("/hello", this.userController.hello);
 
-        this.router.post("/login", this.userController.login);
+       
     }
     public getRouter(): Router {
         return this.router;
