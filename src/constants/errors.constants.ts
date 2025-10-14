@@ -1,5 +1,6 @@
 export const ERRORS = {
     USER_NOT_FOUND : 'User not found',
     INVALID_PASSWORD: 'Invalid password',
-    USER_ALREADY_EXISTS: 'User already exists'
+    USER_ALREADY_EXISTS: 'User already exists',
+    INVALID_TOKEN: 'Invalid token'
 }

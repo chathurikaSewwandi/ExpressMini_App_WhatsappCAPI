@@ -3,7 +3,7 @@ import { ERRORS } from "../constants/errors.constants";
 import { UserDao } from "../dao/user.dao";
 import { LoginDto, LoginResponseDto } from "../dto/login/login.dto";
 import jwt from "jsonwebtoken";
-import { IUser } from "../model/user.model";
+import { IUser, UserType } from "../model/user.model";
 
 export class AuthService {
     private static instance: AuthService;
@@ -51,4 +51,18 @@ export class AuthService {
         
          return {accessToken, refreshToken};
         }
+        public verifyToken(token: string): {id:string, type:UserType}{
+            // token =  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZTdhOGY1NDIwZTE2YTk1NmFiOWE4MiIsInR5cGUiOiJhZG1pbiIsImlhdCI6MTc2MDQxNjc4OSwiZXhwIjoxNzYwNDIwMzg5fQ.P7AlmxoZWmajraiAXpCuquuxbOyEWNIzys6d54MM-OY
+           try{
+            token = token.split(" ")[1];
+            const decoded = jwt.verify(token, APP_CONFIG.ACCESS_TOKEN_SECRET as string) ;
+            return decoded as {id:string, type:UserType};
+
+           }
+              catch(error){
+                throw new Error(ERRORS.INVALID_TOKEN);
+              }
+            }
+            
+        
 }
