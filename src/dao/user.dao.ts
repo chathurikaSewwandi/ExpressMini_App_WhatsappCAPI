@@ -42,4 +42,13 @@ export class UserDao {
             throw error;
         }
     }
+    public async updateUser(id: string, user: Partial<IUser>): Promise<IUser> {
+
+        try{
+            return await User.findByIdAndUpdate(id, user, {new: true}).lean().exec() as IUser;
+        }catch(error){
+            console.log(error);
+            throw error;
+        }
+    }
 }
