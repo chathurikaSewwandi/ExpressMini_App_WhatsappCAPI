@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { UserController } from "../controller/user.controller";
-import { AuthMiddleware } from "../middleware/auth.middleware";
+import { authenticateJWT, AuthMiddleware } from "../middleware/auth.middleware";
 
 
 export class UserRouter {
@@ -30,10 +30,10 @@ export class UserRouter {
         //this.router.get("/", this.userController.getUsers);
         //localhost:{port}/user/hello
         this.router.post("/hello", this.userController.hello);
-        this.router.get("/me",this.authMiddleware.authenticateJWT,//req,res,next
+        this.router.get("/me",authenticateJWT(),//req,res,next
              this.userController.getCurrentUser);//req
         
-        this.router.patch("/",this.authMiddleware.authenticateJWT,
+        this.router.patch("/",authenticateJWT(),
         this.userController.updateUser);
        
     }

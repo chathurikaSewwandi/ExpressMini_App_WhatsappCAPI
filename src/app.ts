@@ -9,7 +9,6 @@ import { AuthRouter } from './routes/auth.routes';
 const app = express();
 app.use(express.json());
 
-
 const webhookRouter = WebhookRouter.getInstance();
 const messageRouter = MessageRouter.getInstance();
 const userRouter = UserRouter.getInstance();
