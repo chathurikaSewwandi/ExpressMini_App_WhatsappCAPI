@@ -4,6 +4,7 @@ import { UserDao } from "../dao/user.dao";
 import { LoginDto, LoginResponseDto } from "../dto/login/login.dto";
 import jwt from "jsonwebtoken";
 import { IUser, UserType } from "../model/user.model";
+import bcrypt from 'bcrypt';
 
 export class AuthService {
     private static instance: AuthService;
@@ -23,6 +24,7 @@ export class AuthService {
             if(!loginUser){
                 throw new Error(ERRORS.USER_NOT_FOUND);
             }
+            const isPasswordValid = await bcrypt.compare(user.password, loginUser.password);
             if (loginUser.password !== user.password) {
                 throw new Error(ERRORS.INVALID_PASSWORD);
                 
@@ -62,7 +64,5 @@ export class AuthService {
               catch(error){
                 throw new Error(ERRORS.INVALID_TOKEN);
               }
-            }
-            
-        
+            }  
 }
