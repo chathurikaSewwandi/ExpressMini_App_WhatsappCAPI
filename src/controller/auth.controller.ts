@@ -1,6 +1,6 @@
 import { ERRORS } from "../constants/errors.constants";
 import { LoginDto } from "../dto/login/login.dto";
-import { IUser } from "../model/user.model";
+import { IUser, User } from "../model/user.model";
 import { AuthService } from "../service/auth.service";
 import { Request, Response } from "express";
 import { UserService } from "../service/user.service";
@@ -15,7 +15,7 @@ export class AuthController {
     //register
         register = async (req:Request, res:Response) =>{
             const user = req.body as unknown as IUser;
-            if(!user.name || !user.phoneNumber){
+            if(!user.name || !user.phoneNumber|| !user.email || !user.password){
                 res.status(400).json({message: 'Name and phone number are required'});
                 return;
             }
