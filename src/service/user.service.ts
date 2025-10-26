@@ -16,7 +16,7 @@ private constructor(){
     this.userDao = UserDao.getInstance();
 }
 
-public async createUser(user:IUser): Promise<IUser>{
+public async createUser(user: IUser): Promise<Omit<IUser, 'password'>> {
     try{
         user.password = await bcrypt.hash(user.password, 10);
         const createdUser = await this.userDao.createUser(user); 
@@ -31,6 +31,7 @@ public async createUser(user:IUser): Promise<IUser>{
         throw error;
     }
 }
+
  public async getUserById(id: string): Promise<IUser> {
         try{
             return await this.userDao.getUserById(id);

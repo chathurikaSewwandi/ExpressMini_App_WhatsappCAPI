@@ -7,31 +7,32 @@ export class UserDao {
             UserDao.instance = new UserDao();
         }
         return UserDao.instance;
-}
+    }
     private constructor(){
     }
 
-    public async createUser(user:IUser):Promise<IUser>{
-         try {
+    public async createUser(user:IUser):Promise<Omit<IUser, 'password'>> {
                 const newUser = new User(user);
                 const createdUser =  await newUser.save();
                 // createdUser.phoneNumber = '';
                 // createdUser.save();
-            return createdUser.toJSON() as IUser;
-         }catch(error){
+                const createdUserJson = createdUser.toJSON() as IUser;
+                delete (createdUserJson as any).password;
+                return createdUser.toJSON()  ;
+         }catch(error:any){
+            console.log(error);
             throw error;
          }
-         }
-    public async getUserByEmail(email:string): Promise<IUser>{
+
+public async getUserByEmail(email:string): Promise<IUser>{
         try {
-            return await User.findOne({email:email}).lean().exec() as IUser;
-            
+            return await User.findOne({email:email}).lean().exec() as IUser;   
         } catch (error) {
             console.log(error);
             throw error;
         }
     }
-    public async getUserById(id:string, withPassword: 0|1 = 0): Promise<IUser>{
+public async getUserById(id:string, withPassword: 0|1 = 0): Promise<IUser>{
         try {
             return await User.findById(
                 new mongoose.Types.ObjectId(id),
@@ -42,11 +43,12 @@ export class UserDao {
             throw error;
         }
     }
-    public async updateUser(id: string, user: Partial<IUser>): Promise<IUser> {
+public async updateUser(id: string, user: Partial<IUser>): Promise<IUser> {
 
         try{
             return await User.findByIdAndUpdate(id, user, {new: true}).lean().exec() as IUser;
-        }catch(error){
+        }
+        catch(error){
             console.log(error);
             throw error;
         }

@@ -1,3 +1,4 @@
+import { ProductRouter } from './routes/product.routes';
 import  mongoose from 'mongoose';
 import express from 'express';
 import { APP_CONFIG } from './config/app.config';
@@ -13,13 +14,14 @@ const webhookRouter = WebhookRouter.getInstance();
 const messageRouter = MessageRouter.getInstance();
 const userRouter = UserRouter.getInstance();
 const authRouter = AuthRouter.getInstance();
-
+const productRouter = ProductRouter.getInstance();
 //app.post("/send-message",messageController.sendMessage);
 
 app.use("/webhook", webhookRouter.getRouter());
 app.use("/user", userRouter.getRouter());
 app.use("/message", messageRouter.getRouter());
 app.use("/auth",authRouter.getRouter());
+app.use("/product",productRouter.getRouter());
 
 app.get('/health', (req, res) => {
     res.send('OK');
